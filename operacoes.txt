@@ -1,3 +1,7 @@
+b 113
+b 34
+b 221
+i 12|O Silêncio dos Inocentes|Jonathan Demme|1991|Crime, Drama, Suspense|118|Jodie Foster, Anthony Hopkins, Lawrence A. Bonney|
 r 85
 r 20
 r 311
@@ -5,3 +9,44 @@ r 123
 r 7
 r 114
 i 72|O Senhor dos Anéis: O Retorno do Rei|Peter Jackson|2003|Aventura, Fantasia|201|Elijah Wood, Ian McKellen, Viggo Mortensen|
+i 150|O Tigre e o Dragão|Ang Lee|2000|Ação, Aventura, Fantasia|120|Chow Yun|
+i 47|Jurassic World|Colin Trevorrow|2015|Ação, Aventura, Ficção Científica|124|Chris Pratt, Bryce Dallas Howard, Vincent D'Onofrio|
+r 160
+b 150
+r 12
+b 29
+b 7
+i 44|Como Treinar o Seu Dragão|Dean DeBlois, Chris Sanders|2010|Animação, Aventura, Família|98|Jay Baruchel, Gerard Butler, Craig Ferguson|
+i 126|Corações de Ferro|David Ayer|2014|Ação, Drama, Guerra|134|Brad Pitt, Shia LaBeouf, Logan Lerman|
+r 1
+b 4
+b 36
+r 36
+i 2|Interestelar|Christopher Nolan|2014|Aventura, Drama, Ficção Científica|169|Matthew McConaughey, Anne Hathaway, Jessica Chastain|
+i 8|O Rei Leão|Roger Allers, Rob Minkoff|1994|Animação, Aventura, Drama|88|Matthew Broderick, Jeremy Irons, James Earl Jones|
+i 99|A Origem|Christopher Nolan|2010|Ação, Aventura, Ficção Científica|148|Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page|
+i 100|Toy Story|John Lasseter|1995|Animação, Aventura, Comédia|81|Tom Hanks, Tim Allen, Don Rickles|
+r 8
+r 91
+r 120
+r 77
+r 25
+b 100
+b 170
+i 26|Ratatouille|Brad Bird, Jan Pinkava|2007|Animação, Aventura, Comédia|111|Patton Oswalt, Ian Holm, Lou Romano|
+i 215|Coco: A Vida é uma Festa|Lee Unkrich, Adrian Molina|2017|Animação, Aventura, Família|105|Anthony Gonzalez, Gael García Bernal, Benjamin Bratt|
+b 215
+r 215
+b 215
+i 75|O Senhor dos Anéis: A Sociedade do Anel|Peter Jackson|2001|Aventura, Drama, Fantasia|178|Elijah Wood, Ian McKellen, Orlando Bloom|
+i 208|Homem-Aranha: No Aranhaverso|Bob Persichetti, Peter Ramsey, Rodney Rothman|2018|Animação, Ação, Aventura|117|Shameik Moore, Jake Johnson, Hailee Steinfeld|
+i 215|Zootopia: Essa Cidade é o Bicho|Byron Howard, Rich Moore|2016|Animação, Aventura, Comédia|108|Ginnifer Goodwin, Jason Bateman, Idris Elba|
+b 215
+r 108
+r 113
+r 97
+r 164
+b 75
+b 43
+i 35|Kung Fu Panda|Mark Osborne, John Stevenson|2008|Animação, Ação, Aventura|92|Jack Black, Ian McShane, Angelina Jolie|
+i 105|Up: Altas Aventuras|Pete Docter, Bob Peterson|2009|Animação, Aventura, Comédia|96|Edward Asner, Jordan Nagai, John Ratzenberger|
