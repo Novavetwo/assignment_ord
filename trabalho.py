@@ -82,14 +82,9 @@ def monta_registro(filmes: io.BufferedReader, offset: int) -> Registro:
     Se o offset for -1, retorna o final da LED.
     """
 
-
-    # FIXME: print para depuração.
-    # Remover antes da entrega final.
-    print(f"monta_registro: offset {offset}")
     filmes = open('filmes.dat', 'r+b')
 
     if offset == 0: # Offset 0 indica o cabeçalho da LED.
-        print("Cabeçalho da LED encontrado.")
         filmes.seek(0)
         offset_prox = int.from_bytes(
             filmes.read(4), 'big', signed=True
@@ -98,36 +93,25 @@ def monta_registro(filmes: io.BufferedReader, offset: int) -> Registro:
         return Registro(offset, 0, offset_prox)
 
     elif offset == -1: # Offset -1 indica o final da LED.
-        print("Final da LED encontrado.")
-
         return Registro(offset, 0, -1)
 
     # Lê os dados do registro de offset *offset*.
     else:
-        # FIXME: print temporário para depuração.
-        print(f"Offset LED: {offset}")
-
         filmes.seek(offset)
         tamanho = int.from_bytes(filmes.read(2), 'big', signed=True)
         status = filmes.read(1).decode(errors='ignore')
-
-        # FIXME: print temporário para depuração.
-        print(f"Tamanho do registro: {tamanho} bytes")
-        print(f"Status: {status}")
 
         if status == '*':
             offset_prox = int.from_bytes(
                 filmes.read(4), 'big', signed=True
                 )
+            # FIXME: print temporário para depuração.
             print(f"Próximo registro da LED: {offset_prox}")
 
         else:
             # Registro ativo: não tem offset_prox.
             offset_prox = -1
-            print("Registro ativo, não faz parte da LED.")
-        
-        # FIXME: print temporário para depuração.
-        filmes = pausa_para_verificacao(filmes, 'filmes.dat')
+
         registro_montado = Registro(
             offset, tamanho, offset_prox
             )
@@ -219,16 +203,10 @@ def atualiza_led(filmes: io.BufferedRandom, offset_removido: int) -> None:
 
 
     filmes = open('filmes.dat', 'r+b')
-    led_atual = monta_registro(filmes, 0) # FIXME: Trocar 0 por offset_removido.
-
-    # FIXME: print temporário para depuração.
-    print(f"Atualizando LED: offset removido {offset_removido}")
-    print(f"LED atual: {led_atual}")
-    filmes = pausa_para_verificacao(filmes, 'filmes.dat')
+    led_atual = monta_registro(filmes, 0)
 
     if offset_removido == led_atual.offset_prox:
         # Remove da cabeça da LED o offset removido.
-        print("Atualizando cabeça da LED.")
         led_proximo = monta_registro(
             filmes, led_atual.offset_prox
             )
@@ -376,18 +354,11 @@ def offset_registro(filmes: io.BufferedReader, id: str) -> int:
     Se o ID não for encontrado, retorna -1.
     """
 
+
     filmes = open('filmes.dat', 'r+b')
     EOF = False # End Of File — indica o fim do arquivo.
 
     filmes.seek(4) # Pula cabeçalho do arquivo.
-
-    """
-    FIXME: Código sugerido que não foi utilizado,
-    mas pode ser útil para referência futura.
-
-    id = id.strip()  # Remove espaços em branco desnecessários.
-    """
-
 
     # Lê registros até encontrar o ID ou chegar ao fim do arquivo.
     while not EOF:
@@ -432,26 +403,19 @@ def impressao_led(nome_filmes: str) -> None:
     """
 
     # Abre o arquivo *nome_filmes* em modo leitura binária.
-    try:
-        filmes = open(nome_filmes, 'rb')
-    except FileNotFoundError as e:
-        print(f"Erro impressaoLED: {e}")
+
+    filmes = open(nome_filmes, 'rb')
 
     # Lê o cabeçalho da LED, que contém o offset da cabeça.
     filmes.seek(0)
     offset_led = int.from_bytes(filmes.read(4), 'big', signed=True)
     registros_led: list[Registro] = []
 
-    # FIXME: Após a inserção do registro 72, caso tente imprimir,
-    # o loop não para.
     # Armazena todos os espaços informados na LED em *registrosLED*.
     while offset_led != -1:
         # FIXME: print temporário para depuração.
         # Remover antes da entrega final.
         print(f"Offset LED: {offset_led}")
-
-        # FIXME: código temporário para testes manuais.
-        # Remover antes da entrega final.
         filmes = pausa_para_verificacao(filmes, nome_filmes)
 
         led_atual = monta_registro(filmes, offset_led)
@@ -617,12 +581,14 @@ def remove_registro(filmes: io.BufferedRandom, id: str) -> None:
         if insere == 1:
             filmes = open('filmes.dat', 'r+b')
             filmes.seek(offset)
-            tamanho = int.from_bytes(
+            tamanho_registro_removido = int.from_bytes(
                 filmes.read(2), 'big', signed=True
                 )
 
             print(f"Remoção do registro de chave \"{id}\"")
-            print(f"Registro removido! ({tamanho} bytes)")
+            print(f"Registro removido! ("
+                  f"{tamanho_registro_removido} bytes)"
+            )
             print(f"Local: offset = {offset} bytes "
                   f"({hex(offset)})\n")
 
@@ -644,13 +610,12 @@ def insere_registro(filmes: io.BufferedRandom, registro: str) -> None:
     filmes = open('filmes.dat', 'r+b')
     # Transforma *registro* em binário e obtém seu tamanho.
     registro_binario = registro.encode()
+
+    # FIXME: tamanho_registro está errado.
+    # O método de obtenção do tamanho no remover_registro
+    # não é o mesmo que o utilizado aqui. Lá está correto.
     tamanho_registro = len(registro_binario)
     tamanho_binario = tamanho_registro.to_bytes(2, 'big', signed=True)
-
-    # FIXME: Debugging print para verificar o registro.
-    print(f"Inserindo registro: {registro}")
-    print(f"Tamanho do registro: {tamanho_registro} bytes\n")
-    filmes = pausa_para_verificacao(filmes, 'filmes.dat')
 
     # Obtém o topo da LED e verifica seu tamanho.
     filmes.seek(0)
@@ -663,58 +628,54 @@ def insere_registro(filmes: io.BufferedRandom, registro: str) -> None:
             f"({hex(offset_atual_led)})\n")
     filmes = pausa_para_verificacao(filmes, 'filmes.dat')
 
-    led_atual = monta_registro(filmes, offset_atual_led)
-    tamanho_led_atual = led_atual.tamanho
-
-    # FIXME: Debugging print para verificar o tamanho da LED atual.
-    print(f"led_atual: {led_atual}")
-    print(f"Tamanho da LED atual: {tamanho_led_atual} bytes\n")
-    filmes = pausa_para_verificacao(filmes, 'filmes.dat')
-
     EOL = False # End Of LED — indica o fim da LED.
 
     if offset_atual_led == -1: # Verifica se a LED está vazia.
-        print("LED vazia. Inserindo no final do arquivo.")
         EOL = True
 
-    # Encontra |offset da LED| >= |registro|.
-    while (tamanho_registro > tamanho_led_atual) and (not EOL):
-        if led_atual.offset == -1:
-            print("LED vazia. Inserindo no final do arquivo.")
-            EOL = True
+    else:
+        led_atual = monta_registro(filmes, offset_atual_led)
+        tamanho_led_atual = led_atual.tamanho
 
-        else:
-            led_atual = monta_registro(
-                filmes, led_atual.offset_prox
-                )
-            tamanho_led_atual = led_atual.tamanho
+        # FIXME: Debugging print para verificar o tamanho da LED atual.
+        print(f"led_atual: {led_atual}")
+        print(f"Tamanho da LED atual: {tamanho_led_atual} bytes\n")
+        filmes = pausa_para_verificacao(filmes, 'filmes.dat')
 
-    # FIXME: Debugging print para verificar o estado da LED.
-    print(f"LED atual: {led_atual}")
-    print(f"Tamanho da LED atual: {tamanho_led_atual} bytes\n")
-    filmes = pausa_para_verificacao(filmes, 'filmes.dat')
+        # Encontra um espaço na LED que caiba o registro.
+        while (tamanho_registro > tamanho_led_atual) and (not EOL):
+            if led_atual.offset_prox == -1:
+                EOL = True
+
+            else:
+                led_atual = monta_registro(
+                    filmes, led_atual.offset_prox
+                    )
+                tamanho_led_atual = led_atual.tamanho
 
     if not EOL:
-        print("LED não vazia. Inserindo no meio da LED.")
         # Insere registro no offset da LED.
-        filmes.seek(led_atual.offset+2+1)
-        filmes.write(registro_binario)
+        filmes.seek(led_atual.offset)
+        filmes.write(tamanho_binario) # Escreve o tamanho do registro.
+        filmes.write(registro_binario) # Escreve os dados do registro.
         atualiza_led(filmes, led_atual.offset)
-
-    elif EOL:
-        # Insere *registro* no final de *filmes*.
+        local_insercao = led_atual.offset
+    else:
+        # Insere no final do arquivo.
         filmes.seek(0, 2)
+        local_insercao = filmes.tell()
         filmes.write(tamanho_binario)
         filmes.write(registro_binario)
-    
+
+    # Imprime resultados da inserção.
     id_registro = registro.split('|')[0]  # Obtém o ID do registro.
     print(f"Inserção do registro de chave \"{id_registro}\" "
           f"({tamanho_registro} bytes)"
     )
 
-    if led_atual.offset != -1:
-        print(f"Local: offset {led_atual.offset} bytes "
-                f"({hex(led_atual.offset)})\n"
+    if not EOL:
+        print(f"Local: offset {local_insercao} bytes "
+                f"({hex(local_insercao)})\n"
     )
 
     else:
@@ -734,7 +695,7 @@ def busca_registro(filmes: io.BufferedReader, id: str) -> None:
     # Se o registro não foi encontrado, imprime mensagem de erro
     # e retorna.
     if offset == -1:
-        print(f"Busca pelo registro de chave \"{id}\".")
+        print(f"Busca pelo registro de chave \"{id}\"")
         print("Erro: registro nao encontrado!\n")
 
         return
@@ -785,7 +746,6 @@ def main(operacoes) -> None:
             # FIXME: código temporário para verificar busca.
             # Remover antes da entrega final.
             filmes = pausa_para_verificacao(filmes, 'filmes.dat')
-            #TOERASE
 
         elif operacao == 'r':
             filmes.seek(0)
